@@ -2,18 +2,904 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Automated CI/CD Pipeline using GitHub, Jenkins, Docker, Ansible and AWS">
+
     <title>Automated CI/CD Pipeline</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f9fc;
+            color: #1d3557;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: auto;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0077b6;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #1d3557;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #0077b6;
+        }
+
+        /* Hero */
+
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #e0f7ff,
+                    #f4f9fc
+                );
+        }
+
+        .hero-content {
+            max-width: 850px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: #d8f3ff;
+            color: #0077b6;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: #023e8a;
+        }
+
+        .hero p {
+            font-size: 19px;
+            max-width: 700px;
+            margin: auto;
+            color: #526777;
+        }
+
+        .buttons {
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 25px;
+            margin: 5px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .primary {
+            background: #0077b6;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #023e8a;
+        }
+
+        .secondary {
+            border: 2px solid #0077b6;
+            color: #0077b6;
+        }
+
+        .secondary:hover {
+            background: #0077b6;
+            color: white;
+        }
+
+        /* Sections */
+
+        section {
+            max-width: 1200px;
+            margin: auto;
+            padding: 80px 25px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 35px;
+            color: #023e8a;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #607d8b;
+        }
+
+        /* Pipeline */
+
+        .pipeline {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            align-items: center;
+        }
+
+        .pipeline-card {
+            background: white;
+            padding: 25px 15px;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.08);
+            transition: 0.3s;
+        }
+
+        .pipeline-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .pipeline-icon {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .pipeline-card h3 {
+            color: #0077b6;
+            margin-bottom: 8px;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 25px;
+            color: #0077b6;
+        }
+
+        /* Technology Cards */
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .tech-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.07);
+        }
+
+        .tech-card h3 {
+            color: #023e8a;
+            margin-bottom: 10px;
+        }
+
+        /* Features */
+
+        .features {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .feature {
+            padding: 30px;
+            background: white;
+            border-left: 5px solid #0077b6;
+            border-radius: 10px;
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .feature h3 {
+            margin-bottom: 10px;
+            color: #023e8a;
+        }
+
+        /* Architecture */
+
+        .architecture {
+            background: #023e8a;
+            color: white;
+            border-radius: 20px;
+            padding: 50px 30px;
+            text-align: center;
+        }
+
+        .architecture h2 {
+            margin-bottom: 30px;
+        }
+
+        .architecture-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .architecture-item {
+            background: white;
+            color: #023e8a;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .architecture-arrow {
+            font-size: 25px;
+        }
+
+        /* About */
+
+        .about-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.07);
+            text-align: center;
+        }
+
+        /* Footer */
+
+        footer {
+            background: #012a4a;
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        footer h3 {
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: #c8e6f0;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer-links a:hover {
+            color: #90e0ef;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 768px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            .pipeline {
+                grid-template-columns: 1fr;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+
+        }
+
+    </style>
 </head>
 
 <body>
 
-    <h1>Automated CI/CD Pipeline</h1>
+<!-- Navbar -->
+
+<header>
+
+    <nav>
+
+        <div class="logo">
+            CI/CD Pipeline
+        </div>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="#home">Home</a>
+            </li>
+
+            <li>
+                <a href="#pipeline">Pipeline</a>
+            </li>
+
+            <li>
+                <a href="#technology">Technology</a>
+            </li>
+
+            <li>
+                <a href="#architecture">Architecture</a>
+            </li>
+
+            <li>
+                <a href="#about">About</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+</header>
+
+
+<!-- Hero -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <span class="badge">
+            DevOps Automation Project
+        </span>
+
+        <h1>
+            Automated CI/CD Pipeline
+        </h1>
+
+        <p>
+            A modern DevOps project demonstrating
+            continuous integration and continuous
+            deployment using GitHub, Jenkins,
+            Docker, Ansible and AWS EC2.
+        </p>
+
+        <div class="buttons">
+
+            <a
+                href="#pipeline"
+                class="btn primary">
+                Explore Pipeline
+            </a>
+
+            <a
+                href="https://github.com/"
+                target="_blank"
+                class="btn secondary">
+                View GitHub
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Pipeline -->
+
+<section id="pipeline">
+
+    <div class="section-title">
+
+        <h2>
+            CI/CD Pipeline
+        </h2>
+
+        <p>
+            Automated workflow from source code
+            to production deployment.
+        </p>
+
+    </div>
+
+
+    <div class="pipeline">
+
+        <div class="pipeline-card">
+
+            <div class="pipeline-icon">
+                📁
+            </div>
+
+            <h3>
+                GitHub
+            </h3>
+
+            <p>
+                Source code management
+                and version control.
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="pipeline-card">
+
+            <div class="pipeline-icon">
+                ⚙️
+            </div>
+
+            <h3>
+                Jenkins
+            </h3>
+
+            <p>
+                Continuous integration
+                and automated pipeline.
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="pipeline-card">
+
+            <div class="pipeline-icon">
+                🐳
+            </div>
+
+            <h3>
+                Docker
+            </h3>
+
+            <p>
+                Application containerization
+                and image management.
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="pipeline-card">
+
+            <div class="pipeline-icon">
+                🔧
+            </div>
+
+            <h3>
+                Ansible
+            </h3>
+
+            <p>
+                Automated server configuration
+                and deployment.
+            </p>
+
+        </div>
+
+
+        <div class="arrow">
+            →
+        </div>
+
+
+        <div class="pipeline-card">
+
+            <div class="pipeline-icon">
+                ☁️
+            </div>
+
+            <h3>
+                AWS EC2
+            </h3>
+
+            <p>
+                Cloud infrastructure
+                and application hosting.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Technology -->
+
+<section id="technology">
+
+    <div class="section-title">
+
+        <h2>
+            Technologies Used
+        </h2>
+
+        <p>
+            Tools used to build and automate
+            the complete deployment process.
+        </p>
+
+    </div>
+
+
+    <div class="tech-grid">
+
+        <div class="tech-card">
+
+            <h3>
+                GitHub
+            </h3>
+
+            <p>
+                Source code management,
+                branches and pull requests.
+            </p>
+
+        </div>
+
+
+        <div class="tech-card">
+
+            <h3>
+                Jenkins
+            </h3>
+
+            <p>
+                Automates build, testing
+                and deployment.
+            </p>
+
+        </div>
+
+
+        <div class="tech-card">
+
+            <h3>
+                Docker
+            </h3>
+
+            <p>
+                Packages the application
+                into portable containers.
+            </p>
+
+        </div>
+
+
+        <div class="tech-card">
+
+            <h3>
+                Ansible
+            </h3>
+
+            <p>
+                Automates application
+                deployment and configuration.
+            </p>
+
+        </div>
+
+
+        <div class="tech-card">
+
+            <h3>
+                AWS EC2
+            </h3>
+
+            <p>
+                Hosts the production
+                application in the cloud.
+            </p>
+
+        </div>
+
+
+        <div class="tech-card">
+
+            <h3>
+                GitHub Actions
+            </h3>
+
+            <p>
+                Runs automated CI checks
+                on code changes.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Architecture -->
+
+<section id="architecture">
+
+    <div class="architecture">
+
+        <h2>
+            Project Architecture
+        </h2>
+
+        <div class="architecture-flow">
+
+            <div class="architecture-item">
+                Developer
+            </div>
+
+            <div class="architecture-arrow">
+                →
+            </div>
+
+            <div class="architecture-item">
+                GitHub
+            </div>
+
+            <div class="architecture-arrow">
+                →
+            </div>
+
+            <div class="architecture-item">
+                Jenkins
+            </div>
+
+            <div class="architecture-arrow">
+                →
+            </div>
+
+            <div class="architecture-item">
+                Docker
+            </div>
+
+            <div class="architecture-arrow">
+                →
+            </div>
+
+            <div class="architecture-item">
+                Ansible
+            </div>
+
+            <div class="architecture-arrow">
+                →
+            </div>
+
+            <div class="architecture-item">
+                AWS EC2
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Features -->
+
+<section>
+
+    <div class="section-title">
+
+        <h2>
+            Key Features
+        </h2>
+
+        <p>
+            What this project demonstrates.
+        </p>
+
+    </div>
+
+
+    <div class="features">
+
+        <div class="feature">
+
+            <h3>
+                Automated Integration
+            </h3>
+
+            <p>
+                Code changes are automatically
+                validated using CI workflows.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <h3>
+                Containerization
+            </h3>
+
+            <p>
+                The application runs inside
+                a lightweight Docker container.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <h3>
+                Automated Deployment
+            </h3>
+
+            <p>
+                Ansible automates deployment
+                to the AWS EC2 server.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <h3>
+                Cloud Hosting
+            </h3>
+
+            <p>
+                The application is hosted
+                on AWS EC2 infrastructure.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- About -->
+
+<section id="about">
+
+    <div class="section-title">
+
+        <h2>
+            About This Project
+        </h2>
+
+    </div>
+
+    <div class="about-box">
+
+        <p>
+            This project demonstrates a complete
+            DevOps CI/CD workflow. Source code is
+            maintained in GitHub, automated builds
+            are handled by Jenkins, the application
+            is containerized using Docker, deployment
+            is automated with Ansible, and the final
+            application is hosted on AWS EC2.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- Footer -->
+
+<footer>
+
+    <h3>
+        Automated CI/CD Pipeline
+    </h3>
 
     <p>
-        This application is automatically built,
-        tested, containerized and deployed.
+        Built as a DevOps and Cloud Computing
+        portfolio project.
     </p>
+
+    <div class="footer-links">
+
+        <a
+            href="https://github.com/"
+            target="_blank">
+            GitHub
+        </a>
+
+        <a
+            href="https://www.linkedin.com/"
+            target="_blank">
+            LinkedIn
+        </a>
+
+    </div>
+
+    <p style="margin-top: 20px;">
+        © 2026 CI/CD Pipeline Project
+    </p>
+
+</footer>
+
 
 </body>
 </html>
