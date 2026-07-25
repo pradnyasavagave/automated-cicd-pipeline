@@ -1,0 +1,20 @@
+---
+- name: Deploy Docker Application
+  hosts: webserver
+  become: true
+
+  tasks:
+
+    - name: Pull Docker image
+      community.docker.docker_image:
+        name: your-dockerhub-username/automated-cicd-pipeline
+        source: pull
+
+    - name: Run Docker container
+      community.docker.docker_container:
+        name: cicd-web-app
+        image: your-dockerhub-username/automated-cicd-pipeline
+        state: started
+        restart_policy: always
+        ports:
+          - "80:80"
