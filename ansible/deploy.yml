@@ -1,19 +1,34 @@
 ---
-- name: Deploy Docker Application
+- name: Deploy CI/CD Application
   hosts: webserver
   become: true
 
   tasks:
 
-    - name: Pull Docker image
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull application Docker image
       community.docker.docker_image:
-        name: your-dockerhub-username/automated-cicd-pipeline
+        name: your-dockerhub-username/automated-cicd-pipeline:latest
         source: pull
 
-    - name: Run Docker container
+    - name: Run application container
       community.docker.docker_container:
-        name: cicd-web-app
-        image: your-dockerhub-username/automated-cicd-pipeline
+        name: automated-cicd-pipeline
+        image: your-dockerhub-username/automated-cicd-pipeline:latest
         state: started
         restart_policy: always
         ports:
