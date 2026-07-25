@@ -5,33 +5,102 @@ pipeline {
     stages {
 
         stage('Checkout') {
+
             steps {
+
+                echo 'Checking out source code...'
+
                 checkout scm
+
             }
+
         }
 
-        stage('Build') {
+
+        stage('Build Docker Image') {
+
             steps {
-                echo 'Building application'
+
+                echo 'Building Docker image...'
+
+                sh '''
+                    docker build \
+                    -f docker/Dockerfile \
+                    -t automated-cicd-pipeline:latest .
+                '''
+
             }
+
         }
 
-        stage('Test') {
+
+        stage('Test Docker Image') {
+
             steps {
-                echo 'Running tests'
+
+                echo 'Testing Docker image...'
+
+                sh '''
+                    docker run -d \
+                    --name cicd-test-container \
+                    -p 8080:80 \
+                    automated-cicd-pipeline:latest
+                '''
+
+                sleep 5
+
+                sh '''
+                    curl -f http://localhost:8080
+                '''
+
             }
+
         }
 
-        stage('Docker Build') {
+
+        stage('Cleanup') {
+
             steps {
-                echo 'Building Docker image'
+
+                echo 'Cleaning up test container...'
+
+                sh '''
+                    docker stop cicd-test-container || true
+                    docker rm cicd-test-container || true
+                '''
+
             }
+
         }
 
-        stage('Deploy') {
+
+        stage('Deployment Ready') {
+
             steps {
-                echo 'Deploying application'
+
+                echo 'CI/CD pipeline completed successfully.'
+
             }
+
         }
+
     }
+
+
+    post {
+
+        success {
+
+            echo 'Pipeline completed successfully!'
+
+        }
+
+        failure {
+
+            echo 'Pipeline failed. Check the logs.'
+
+        }
+
+    }
+
 }
